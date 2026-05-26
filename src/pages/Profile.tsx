@@ -171,7 +171,7 @@ export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
       {/* Bind Dialog */}
       <AnimatePresence>
         {showBindDialog && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -222,7 +222,7 @@ export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
       {/* Theme Selection Sheet */}
       <AnimatePresence>
         {showThemeSheet && (
-          <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <div className="fixed inset-0 z-[100] flex flex-col justify-end">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

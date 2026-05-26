@@ -131,7 +131,7 @@ export function Analytics({ setPage }: { setPage: (page: PageType) => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[100] bg-surface flex items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[100] bg-surface flex items-center justify-center overflow-hidden"
           >
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
