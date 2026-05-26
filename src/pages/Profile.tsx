@@ -10,11 +10,17 @@ import {
   User,
   CheckCircle2,
   ChevronRightCircle,
+  Moon,
+  Sun,
+  MonitorSmartphone,
 } from "lucide-react";
 
 import { PageType } from "../types";
+import { useTheme, ThemeMode } from "../components/ThemeProvider";
 
 export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
+  const { theme, setTheme } = useTheme();
+  const [showThemeSheet, setShowThemeSheet] = useState(false);
   const [students, setStudents] = useState([
     { id: "1", name: "李奕辰", grade: "高二 (3) 班", avatar: "辰" },
   ]);
@@ -33,8 +39,16 @@ export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
           avatar: bindInput.trim()[0],
         },
       ]);
-      setShowBindDialog(false);
       setBindInput("");
+      setShowBindDialog(false);
+    }
+  };
+
+  const getThemeText = (mode: ThemeMode) => {
+    switch(mode) {
+      case 'light': return '浅色模式';
+      case 'dark': return '深色模式';
+      case 'system': return '跟随系统';
     }
   };
 
@@ -112,6 +126,17 @@ export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
       <h3 className="font-headline-sm text-on-surface mb-3 px-2">常用功能</h3>
       <section className="glass-panel rounded-[24px] overflow-hidden flex flex-col mb-6">
         <MenuItem
+          icon={<Moon className="w-5 h-5 text-white" />}
+          bg="bg-[#4c4aca]"
+          title="系统主题"
+          extra={
+            <span className="font-label-sm text-outline-variant mr-2">
+              {getThemeText(theme)}
+            </span>
+          }
+          onClick={() => setShowThemeSheet(true)}
+        />
+        <MenuItem
           icon={<Bell className="w-5 h-5 text-[#1a1b1f]" />}
           bg="bg-[#F9D46C]"
           title="消息通知设置"
@@ -187,6 +212,58 @@ export function Profile({ setPage }: { setPage: (page: PageType) => void }) {
                   disabled={!bindInput.trim()}
                 >
                   确认绑定
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Theme Selection Sheet */}
+      <AnimatePresence>
+        {showThemeSheet && (
+          <div className="absolute inset-0 z-50 flex flex-col justify-end">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowThemeSheet(false)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            ></motion.div>
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="relative bg-surface rounded-t-[32px] pt-6 pb-12 px-6 shadow-[0_-8px_32px_rgba(0,0,0,0.1)] flex flex-col gap-4 z-10 mx-auto w-full max-w-3xl"
+            >
+              <div className="w-12 h-1.5 bg-outline-variant/30 rounded-full mx-auto mb-2"></div>
+              <h3 className="font-headline-sm text-center mb-4">系统主题</h3>
+              
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => { setTheme('light'); setShowThemeSheet(false); }}
+                  className={`flex items-center p-4 rounded-2xl transition-colors ${theme === 'light' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}`}
+                >
+                  <Sun className="w-6 h-6 mr-3" />
+                  <span className="font-body-lg flex-1 text-left">浅色模式</span>
+                  {theme === 'light' && <CheckCircle2 className="w-5 h-5" />}
+                </button>
+                <button
+                  onClick={() => { setTheme('dark'); setShowThemeSheet(false); }}
+                  className={`flex items-center p-4 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}`}
+                >
+                  <Moon className="w-6 h-6 mr-3" />
+                  <span className="font-body-lg flex-1 text-left">深色模式</span>
+                  {theme === 'dark' && <CheckCircle2 className="w-5 h-5" />}
+                </button>
+                <button
+                  onClick={() => { setTheme('system'); setShowThemeSheet(false); }}
+                  className={`flex items-center p-4 rounded-2xl transition-colors ${theme === 'system' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}`}
+                >
+                  <MonitorSmartphone className="w-6 h-6 mr-3" />
+                  <span className="font-body-lg flex-1 text-left">跟随系统</span>
+                  {theme === 'system' && <CheckCircle2 className="w-5 h-5" />}
                 </button>
               </div>
             </motion.div>
